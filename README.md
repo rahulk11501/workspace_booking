@@ -2,8 +2,7 @@
 
 ## Overview
 
-This project is a simplified **Virtual Workspace Room Booking System** built with Django and Django REST Framework.
-It supports booking, cancelling, and fetching rooms, following real-world constraints.
+This project is a simplified Virtual Workspace Room Booking System built with Django and Django REST Framework. It supports booking, cancelling, and fetching rooms, following real-world constraints.
 
 ---
 
@@ -21,6 +20,7 @@ workspace_booking/
 │   └── tests/              # Tests, factories
 ├── manage.py
 ├── requirements.txt
+├── Makefile                # Predefined commands for development & testing
 └── README.md
 ```
 
@@ -28,26 +28,26 @@ workspace_booking/
 
 ## Tech Stack
 
-* **Python 3.12**
-* **Django 5.1**
-* **Django REST Framework**
-* **Pydantic v2** (for data validation)
-* **SQLite** (local development)
-* **pytest + pytest-django + factory_boy + Faker** (testing)
-* **ruff** (linting)
+* Python 3.12
+* Django 5.1
+* Django REST Framework
+* Pydantic v2 (for data validation)
+* SQLite (local development)
+* pytest + pytest-django + factory_boy + Faker (testing)
+* ruff (linting)
 
 ---
 
 ## Setup Instructions
 
-1. Clone the repository:
+1. **Clone the repository:**
 
 ```bash
 git clone https://github.com/rahulk11501/workspace_booking.git
 cd workspace_booking
 ```
 
-2. Create a virtual environment:
+2. **Create a virtual environment:**
 
 ```bash
 python -m venv venv
@@ -55,35 +55,44 @@ source venv/bin/activate  # Linux / Mac
 venv\Scripts\activate     # Windows
 ```
 
-3. Install dependencies:
+3. **Install dependencies:**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run migrations:
+4. **Run migrations:**
 
 ```bash
 python manage.py migrate
 ```
 
-5. Run server locally:
+5. **Run server locally:**
 
 ```bash
 python manage.py runserver
+```
+
+6. **Optional: Use Makefile commands**
+
+```bash
+make install      # Install dependencies
+make migrate      # Apply migrations
+make run          # Start local server
+make test         # Run all tests
 ```
 
 ---
 
 ## Testing
 
-1. Run tests using pytest:
+1. **Run tests using pytest:**
 
 ```bash
 pytest -v
 ```
 
-2. Test folder structure:
+2. **Test folder structure:**
 
 ```
 core/tests/
@@ -95,7 +104,7 @@ core/tests/
     └── test_user_schema.py
 ```
 
-3. `pytest.ini` configuration:
+3. **pytest.ini configuration:**
 
 ```ini
 [pytest]
@@ -119,6 +128,24 @@ testpaths = core/tests
 ## Next Steps
 
 * Implement REST API endpoints (Booking, Cancel, Available Rooms)
-* Add Docker + docker-compose for local dev
+* Add Docker + docker-compose for local development
 * Add API documentation (Swagger/OpenAPI)
 * Implement concurrency-safe room booking logic
+
+---
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit pull requests.
+
+---
+
+## License
+
+This project does not currently have a license specified.
+
+---
+
+## About
+
+No description, website, or topics provided.
