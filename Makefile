@@ -68,3 +68,6 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	@echo "✅ Cleanup complete."
 
+run:
+	@echo "🚀 Running Django development server..."
+	. $(VENV)/bin/activate && export DJANGO_SETTINGS_MODULE=config.settings && python manage.py runserver

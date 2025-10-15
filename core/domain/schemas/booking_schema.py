@@ -1,13 +1,12 @@
-# core/schemas/booking_schema.py
-from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional
+from pydantic import BaseModel, ConfigDict
 from .room_schema import RoomSchema
 from .user_schema import UserSchema
 from .team_schema import TeamSchema
 
 class BookingSchema(BaseModel):
-    id: int | None = None
+    id: Optional[int] = None
     room: RoomSchema
     user: Optional[UserSchema] = None
     team: Optional[TeamSchema] = None
@@ -15,10 +14,11 @@ class BookingSchema(BaseModel):
     slot_end: datetime
     created_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
-    def __str__(self):
+    model_config = ConfigDict(from_attributes=True, frozen=True)
+
+    def __str__(self) -> str:
         if self.user:
-            return f"{self.user.name} - {self.room.room_type} ({self.slot_start})"
+            return f"{self.user.name} - {self.room.room_type} ({self.slot_start:%Y-%m-%d %H:%M})"
         if self.team:
-            return f"{self.team.name} - {self.room.room_type} ({self.slot_start})"
-        return f"Booking {self.id} - {self.room.room_type}"
+            return f"{self.team.name} - {self.room.room_type} ({self.slot_start:%Y-%m-%d %H:%M})"
+        return f"Booking {self.id or 'N/A'} - {self.room.room_type}"

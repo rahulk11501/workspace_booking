@@ -1,23 +1,19 @@
-# core/schemas/team_schema.py
+from typing import List, Optional, Any
 from pydantic import BaseModel, ConfigDict, field_validator
-from typing import List
 from .user_schema import UserSchema
 
+
 class TeamSchema(BaseModel):
-    id: int | None = None
+    id: Optional[int] = None
     name: str
     members: List[UserSchema] = []
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, frozen=True)
 
     @field_validator("members", mode="before")
-    def convert_members_manager(cls, v):
-        """
-        Convert Django ManyRelatedManager or QuerySet to a list
-        before Pydantic validation.
-        """
-        # if v is a manager, turn into a list
-        if hasattr(v, "all"):
-            return list(v.all())
-        # already a list
-        return v
+    @classmethod
+    def normalize_members(cls, value: Any) -> List[UserSchema]:
+        """Convert Django ManyRelatedManager or QuerySet to list before validation."""
+        if hasattr(value, "all"):
+            return list(value.all())
+        return list(value) if value else []

@@ -1,9 +1,9 @@
-# core/schemas/room_schema.py
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 class RoomSchema(BaseModel):
-    id: int | None = None
+    id: Optional[int] = None
     room_type: str
     capacity: int
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, frozen=True)
