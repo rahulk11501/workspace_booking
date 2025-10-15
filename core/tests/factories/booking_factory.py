@@ -1,17 +1,18 @@
 # core/tests/factories/booking_factory.py
 import factory
+from django.utils import timezone
 from core.models.booking import Booking
 from core.tests.factories.room_factory import RoomFactory
 from core.tests.factories.user_factory import UserFactory
 from core.tests.factories.team_factory import TeamFactory
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 class BookingFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Booking
 
     room = factory.SubFactory(RoomFactory)
-    slot_start = factory.LazyFunction(lambda: datetime.now())
+    slot_start = factory.LazyFunction(timezone.now)
     slot_end = factory.LazyAttribute(lambda obj: obj.slot_start + timedelta(hours=1))
 
     @factory.lazy_attribute

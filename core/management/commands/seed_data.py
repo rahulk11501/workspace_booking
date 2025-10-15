@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from core.models.user import User
 from core.models.team import Team
 from core.models.room import Room
-from core.models.booking import Booking
 from faker import Faker
 import random
 

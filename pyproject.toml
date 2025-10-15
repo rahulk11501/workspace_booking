@@ -1,0 +1,13 @@
+[tool.ruff]
+# directories/files to lint
+src = ["core", "config"]
+# ignore __pycache__ and migrations
+exclude = ["*/migrations/*", "__pycache__"]
+
+# rules: you can enable/disable as needed
+# example: ignore line-length (E501), but enforce everything else
+ignore = ["E501"]
+
+# fixable issues can be auto-fixed
+fix = true
+

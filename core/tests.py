@@ -1,4 +1,3 @@
-from django.test import TestCase
 
 # TODO: Manual tests for now, will add automated tests later
 
