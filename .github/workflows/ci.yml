@@ -34,4 +34,6 @@ jobs:
           pytest --maxfail=1 --disable-warnings -q
 
       - name: Lint with ruff
-        run: ruff check . --exit-zero
+        run: |
+          source venv/bin/activate
+          ruff check . --exit-zero
