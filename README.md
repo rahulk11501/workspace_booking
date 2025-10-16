@@ -17,6 +17,9 @@ workspace_booking/
 │   ├── __init__.py
 │   ├── models/             # ORM models
 │   ├── schemas/            # Pydantic schemas
+│   ├── management/         # Management commands (seeds, etc.)
+│   │   └── commands/
+│   │       └── seed_data.py
 │   └── tests/              # Tests, factories
 ├── manage.py
 ├── requirements.txt
@@ -84,6 +87,28 @@ make test         # Run all tests
 
 ---
 
+## Seed Data
+
+Populate the database with initial data (users, teams, rooms) using:
+
+```bash
+python manage.py seed_data
+```
+
+This command will create:
+
+* **20 users** with random ages and genders
+* **5 teams** with 3–5 members each
+* **15 rooms**:
+
+  * 8 Private Rooms (capacity = 1)
+  * 4 Conference Rooms (capacity = 10)
+  * 3 Shared Desks (capacity = 4)
+
+> Note: Bookings are optional and can be added in `seed_data.py` if required. Teams and rooms are created with real IDs, so they can be used immediately for testing and bookings.
+
+---
+
 ## Testing
 
 1. **Run tests using pytest:**
@@ -117,11 +142,11 @@ testpaths = core/tests
 
 ## Notes / Updates So Far
 
-* Django project and `core` app created.
-* `settings.py` updated and server runs locally.
-* Pydantic models and schemas implemented.
-* Tests configured with `pytest` and Faker factories.
-* Code pushed to GitHub with migrations tracked.
+* Django project and `core` app created
+* `settings.py` updated and server runs locally
+* Pydantic models and schemas implemented
+* Tests configured with `pytest` and Faker factories
+* Code pushed to GitHub with migrations tracked
 
 ---
 

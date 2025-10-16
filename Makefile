@@ -6,7 +6,7 @@ PYTHON := python3
 VENV := venv
 ACT_EXISTS := $(shell command -v act 2> /dev/null)
 
-.PHONY: help setup install lint test ci clean
+.PHONY: help setup install lint test ci clean run seed
 
 help:
 	@echo ""
@@ -16,6 +16,8 @@ help:
 	@echo "  make lint      → Run Ruff linter"
 	@echo "  make test      → Run pytest with Django settings"
 	@echo "  make ci        → Simulate GitHub CI pipeline locally (requires act)"
+	@echo "  make seed      → Seed initial data into the database"
+	@echo "  make run       → Run Django dev server"
 	@echo "  make clean     → Remove venv and temporary files"
 	@echo ""
 
@@ -62,12 +64,17 @@ ci:
 	fi
 	@echo "✅ Local CI simulation done."
 
+run:
+	@echo "🚀 Running Django development server..."
+	. $(VENV)/bin/activate && export DJANGO_SETTINGS_MODULE=config.settings && python manage.py runserver
+
+seed:
+	@echo "🌱 Seeding initial data..."
+	. $(VENV)/bin/activate && export DJANGO_SETTINGS_MODULE=config.settings && python manage.py seed_data
+	@echo "✅ Seed data completed."
+
 clean:
 	@echo "🧹 Cleaning environment..."
 	rm -rf $(VENV) __pycache__ .pytest_cache
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	@echo "✅ Cleanup complete."
-
-run:
-	@echo "🚀 Running Django development server..."
-	. $(VENV)/bin/activate && export DJANGO_SETTINGS_MODULE=config.settings && python manage.py runserver

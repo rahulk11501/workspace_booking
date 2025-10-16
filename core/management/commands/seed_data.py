@@ -34,13 +34,13 @@ class Command(BaseCommand):
         # --- Rooms ---
         # Private Rooms
         for i in range(8):
-            Room.objects.create(room_type="Private", capacity=1)
+            Room.objects.create(room_type="PRIVATE", capacity=1)
         # Conference Rooms
         for i in range(4):
-            Room.objects.create(room_type="Conference", capacity=10)
+            Room.objects.create(room_type="CONFERENCE", capacity=10)
         # Shared Desks
         for i in range(3):
-            Room.objects.create(room_type="Shared", capacity=4)
+            Room.objects.create(room_type="SHARED", capacity=4)
         self.stdout.write(self.style.SUCCESS("Created all rooms."))
 
         # --- Optional: Bookings ---
