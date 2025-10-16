@@ -4,6 +4,7 @@ from core.domain.entities.user_entity import UserEntity
 from core.domain.repositories.team_repository import TeamRepository
 from core.models.team import Team as TeamModel
 
+
 class DjangoTeamRepository(TeamRepository):
     def get(self, obj_id: int) -> Optional[TeamEntity]:
         obj = TeamModel.objects.filter(id=obj_id).first()
@@ -21,8 +22,6 @@ class DjangoTeamRepository(TeamRepository):
 
     def create(self, entity: TeamEntity) -> TeamEntity:
         obj = TeamModel.objects.create(name=entity.name)
-        obj.members.set([m.id for m in entity.members])
-        obj.save()
         members = [UserEntity(id=m.id, name=m.name, age=m.age, gender=m.gender) for m in obj.members.all()]
         return TeamEntity(id=obj.id, name=obj.name, members=members)
 

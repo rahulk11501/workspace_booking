@@ -1,4 +1,3 @@
-# core/tests/factories/team_factory.py
 import factory
 from core.models.team import Team
 from core.tests.factories.user_factory import UserFactory
@@ -15,13 +14,13 @@ class TeamFactory(factory.django.DjangoModelFactory):
     def members(self, create, extracted, **kwargs):
         if not create:
             return
+
         if extracted:
             for user in extracted:
                 self.members.add(user)
         else:
-            # add 2–5 random users if none passed
-            for _ in range(randint(2, 5)):
+            # Add 0–3 random users (team can exist without members)
+            for _ in range(randint(0, 3)):
                 self.members.add(UserFactory())
 
-        # explicitly save the instance to persist members
         self.save()

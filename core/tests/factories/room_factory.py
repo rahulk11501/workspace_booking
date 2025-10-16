@@ -10,4 +10,15 @@ class RoomFactory(factory.django.DjangoModelFactory):
         model = Room
 
     room_type = factory.LazyFunction(lambda: fake.random_element(["PRIVATE", "CONFERENCE", "SHARED"]))
-    capacity = factory.LazyAttribute(lambda o: 1 if o.room_type == "PRIVATE" else (4 if o.room_type == "SHARED" else 10))
+
+    @factory.lazy_attribute
+    def capacity(self):
+        if self.room_type == "PRIVATE":
+            return 1
+        elif self.room_type == "CONFERENCE":
+            # Random between 3 and 8 members for conferences
+            return fake.random_int(min=3, max=8)
+        elif self.room_type == "SHARED":
+            # Shared desks max 4 users
+            return fake.random_int(min=1, max=4)
+        return 1  # fallback

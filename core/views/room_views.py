@@ -26,10 +26,13 @@ class RoomListCreateAPIView(APIView):
         return Response([RoomSchema.model_validate(r).model_dump() for r in rooms])
 
     def post(self, request):
-        data = request.data
-        room_entity = RoomEntity(id=None, room_type=data["room_type"], capacity=data["capacity"])
-        created_room = room_service.create_room(room_entity)
-        return Response(RoomSchema.model_validate(created_room).model_dump(), status=status.HTTP_201_CREATED)
+        try:
+            room_data = RoomSchema.model_validate(request.data)
+            room_entity = RoomEntity(**room_data.model_dump())
+            created_room = room_service.create_room(room_entity)
+            return Response(RoomSchema.model_validate(created_room).model_dump(), status=status.HTTP_201_CREATED)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 @extend_schema(tags=["Rooms"])
 class RoomRetrieveUpdateDeleteAPIView(APIView):
@@ -40,10 +43,13 @@ class RoomRetrieveUpdateDeleteAPIView(APIView):
         return Response(RoomSchema.model_validate(room).model_dump())
 
     def put(self, request, pk: int):
-        data = request.data
-        room_entity = RoomEntity(id=pk, room_type=data["room_type"], capacity=data["capacity"])
-        updated_room = room_service.update_room(room_entity)
-        return Response(RoomSchema.model_validate(updated_room).model_dump())
+        try:
+            room_data = RoomSchema.model_validate(id=pk, **request.data)
+            room_entity = RoomEntity(room_data.model_dump())
+            updated_room = room_service.update_room(room_entity)
+            return Response(RoomSchema.model_validate(updated_room).model_dump(), status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, pk: int):
         room_service.delete_room(pk)

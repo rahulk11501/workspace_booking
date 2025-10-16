@@ -2,7 +2,6 @@ from typing import List, Optional, Any
 from pydantic import BaseModel, ConfigDict, field_validator
 from .user_schema import UserSchema
 
-
 class TeamSchema(BaseModel):
     id: Optional[int] = None
     name: str
@@ -12,8 +11,16 @@ class TeamSchema(BaseModel):
 
     @field_validator("members", mode="before")
     @classmethod
-    def normalize_members(cls, value: Any) -> List[UserSchema]:
-        """Convert Django ManyRelatedManager or QuerySet to list before validation."""
-        if hasattr(value, "all"):
-            return list(value.all())
-        return list(value) if value else []
+    def normalize_members(cls, v: Any) -> List[UserSchema]:
+        """Convert Django QuerySet, Manager, or list to UserSchema list."""
+        if hasattr(v, "all"):  # Django manager/queryset
+            v = list(v.all())
+        elif v is None:
+            v = []
+        members_list = []
+        for item in v:
+            if isinstance(item, dict):
+                members_list.append(UserSchema.model_validate(item))
+            else:
+                members_list.append(UserSchema.model_validate(item))
+        return members_list

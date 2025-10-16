@@ -26,15 +26,14 @@ class UserListCreateAPIView(APIView):
         return Response([UserSchema.model_validate(u).model_dump() for u in users])
 
     def post(self, request):
-        data = request.data
-        user_entity = UserEntity(
-            id=None,
-            name=data["name"],
-            age=data["age"],
-            gender=data["gender"]
-        )
-        created_user = user_service.create_user(user_entity)
-        return Response(UserSchema.model_validate(created_user).model_dump(), status=status.HTTP_201_CREATED)
+        try:
+            user_data = UserSchema.model_validate(request.data)
+            user_entity = UserEntity(**user_data.model_dump())
+            created_user = user_service.create_user(user_entity)
+            return Response(UserSchema.model_validate(created_user).model_dump(), status=status.HTTP_201_CREATED)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
 
 @extend_schema(tags=["Users"])
 class UserRetrieveUpdateDeleteAPIView(APIView):
@@ -45,15 +44,14 @@ class UserRetrieveUpdateDeleteAPIView(APIView):
         return Response(UserSchema.model_validate(user).model_dump())
 
     def put(self, request, pk: int):
-        data = request.data
-        user_entity = UserEntity(
-            id=pk,
-            name=data["name"],
-            age=data["age"],
-            gender=data["gender"]
-        )
-        updated_user = user_service.update_user(user_entity)
-        return Response(UserSchema.model_validate(updated_user).model_dump())
+        try:
+            user_data = UserSchema.model_validate(request.data)
+            user_entity = UserEntity(id=pk, **user_data.model_dump(exclude={"id"}))
+            updated_user = user_service.update_user(user_entity)
+            return Response(UserSchema.model_validate(updated_user).model_dump(), status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
 
     def delete(self, request, pk: int):
         user_service.delete_user(pk)
